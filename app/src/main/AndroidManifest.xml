@@ -4,14 +4,6 @@
 
     <uses-sdk android:minSdkVersion="11" />
 
-    <android:uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -29,7 +21,11 @@
         </activity>
         <activity
             android:name=".Views.StockSearchResultActivity"
-            android:label="@string/title_activity_stock_search_result" >
+            android:label="@string/stock_search_result_activity" >
+        </activity>
+        <activity
+            android:name=".Services.JSONTickerSearchActivity"
+            android:label="@string/json_ticker_search_activity" >
         </activity>
     </application>
 

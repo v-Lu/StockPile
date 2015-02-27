@@ -56,8 +56,17 @@ public class MainActivity extends FragmentActivity
 				if (!validateFields())
 					return;
 
-				Intent queryData = new Intent(getApplicationContext(), JSONTickerSearchActivity.class);
-				startActivity(queryData);
+				startDate = (EditText) findViewById(R.id.start_date);
+				endDate = (EditText) findViewById(R.id.end_date);
+				ticker = (EditText) findViewById(R.id.ticker_symbol);
+
+				Intent jsonQueryIntent = new Intent(MainActivity.this, JSONTickerSearchActivity.class);
+
+				jsonQueryIntent.putExtra(getString(R.string.start_date_string), startDate.getText().toString());
+				jsonQueryIntent.putExtra(getString(R.string.end_date_string), endDate.getText());
+				jsonQueryIntent.putExtra(getString(R.string.ticker_string), ticker.getText());
+
+				startActivity(jsonQueryIntent);
 
 
 			//Intent stockSearch = new Intent(getApplicationContext(), StockSearchResultActivity.class);

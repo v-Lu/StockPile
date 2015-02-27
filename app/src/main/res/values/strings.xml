@@ -9,6 +9,9 @@
     <string name="end_date">End Date</string>
     <string name="stock_ticker_search_descr">Input a stock ticker symbol to find the Open, High, Low and Close values for a given date range.</string>
     <string name="search_button">Search</string>
-    <string name="title_activity_stock_search_result">StockSearchResultActivity</string>
-
+    <string name="stock_search_result_activity">StockSearchResultActivity</string>
+    <string name="json_ticker_search_activity">JSONTickerSearchActivity</string>
+    <string name="start_date_string">startDate</string>
+    <string name="end_date_string">endDate</string>
+    <string name="ticker_string">ticker</string>
 </resources>

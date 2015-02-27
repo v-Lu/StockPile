@@ -1,6 +1,7 @@
 package victorluproductions.thestockmonitor.Services;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +27,8 @@ public class JSONTickerSearchActivity extends ListActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		Intent intent = getIntent();
 		HttpGetTask getTask = new HttpGetTask();
 		getTask.execute();
 	}

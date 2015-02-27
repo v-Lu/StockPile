@@ -1,4 +1,4 @@
-package victorluproductions.thestockmonitor;
+package victorluproductions.thestockmonitor.Helpers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,9 +8,9 @@ import java.util.Date;
 /**
  * Created by victorlu on 15-02-23.
  */
-public class DateService {
+public class DateHandler {
 
-	public DateService () {
+	public DateHandler() {
 
 	}
 

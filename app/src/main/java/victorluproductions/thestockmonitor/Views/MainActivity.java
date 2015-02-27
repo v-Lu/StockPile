@@ -1,4 +1,4 @@
-package victorluproductions.thestockmonitor.Activities;
+package victorluproductions.thestockmonitor.Views;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import victorluproductions.thestockmonitor.Services.JSONTickerSearchActivity;
 import victorluproductions.thestockmonitor.Fragments.DatePickerFragment;
 import victorluproductions.thestockmonitor.R;
 
@@ -52,7 +53,7 @@ public class MainActivity extends FragmentActivity
 		searchButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (validateFields())
+				if (!validateFields())
 					return;
 
 				Intent queryData = new Intent(getApplicationContext(), JSONTickerSearchActivity.class);

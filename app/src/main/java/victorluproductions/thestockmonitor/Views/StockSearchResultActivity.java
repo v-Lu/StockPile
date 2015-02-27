@@ -1,4 +1,4 @@
-package victorluproductions.thestockmonitor.Activities;
+package victorluproductions.thestockmonitor.Views;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;

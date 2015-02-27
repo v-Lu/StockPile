@@ -1,4 +1,4 @@
-package victorluproductions.thestockmonitor.Activities;
+package victorluproductions.thestockmonitor.Services;
 
 import android.app.ListActivity;
 import android.net.http.AndroidHttpClient;
@@ -8,23 +8,15 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import victorluproductions.thestockmonitor.DateService;
-import victorluproductions.thestockmonitor.JSONResponseHandler;
+import victorluproductions.thestockmonitor.Helpers.DateHandler;
+import victorluproductions.thestockmonitor.Helpers.JSONResponseHandler;
 import victorluproductions.thestockmonitor.R;
 
 /**
@@ -32,9 +24,9 @@ import victorluproductions.thestockmonitor.R;
  */
 public class JSONTickerSearchActivity extends ListActivity {
 
-	public void onCreate(Bundle savedInstanceState, String url) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		HttpGetTask getTask = new HttpGetTask(url);
+		HttpGetTask getTask = new HttpGetTask();
 		getTask.execute();
 	}
 
@@ -47,7 +39,7 @@ public class JSONTickerSearchActivity extends ListActivity {
 
 		AndroidHttpClient client;
 
-		private HttpGetTask(String url) {
+		private HttpGetTask() {
 			this.url = getUrl();
 			client = AndroidHttpClient.newInstance("");
 		}
@@ -60,7 +52,7 @@ public class JSONTickerSearchActivity extends ListActivity {
 			String tickerSymbol = ticker.getText().toString();
 
 			String parsedDate;
-			DateService dateService = new DateService();
+			DateHandler dateService = new DateHandler();
 
 			// get string date for startDate
 			Calendar c = dateService.parseDate(startDate.getText().toString());

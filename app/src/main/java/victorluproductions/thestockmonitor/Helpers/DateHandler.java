@@ -36,7 +36,8 @@ public class DateHandler {
 		String day;
 
 		year = String.valueOf(c.get(Calendar.YEAR));
-		month = String.valueOf(c.get(Calendar.MONTH));
+		// Calendar.MONTH starts at 0... Add 1 to make it a readable date
+		month = String.valueOf(c.get(Calendar.MONTH) + 1);
 		day = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
 
 		return year + "-" + month + "-" + day;

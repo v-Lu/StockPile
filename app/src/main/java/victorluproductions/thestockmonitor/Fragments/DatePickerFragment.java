@@ -4,12 +4,17 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import victorluproductions.thestockmonitor.Helpers.DateHandler;
 
 
 /**
@@ -27,7 +32,7 @@ public class DatePickerFragment extends DialogFragment
 	private static final String arg_year = "year";
 	private static final String arg_month = "month";
 	private static final String arg_day = "day";
-	private static final String arg_dateTextBoxId = "datetextBoxId";
+	private static final String arg_dateTextBoxId = "dateTextBoxId";
 	OnDateSetListener mCallback;
 
 	private int year;
@@ -51,7 +56,7 @@ public class DatePickerFragment extends DialogFragment
 		args.putInt(arg_year, year);
 		args.putInt(arg_month, month);
 		args.putInt(arg_day, day);
-		args.putInt(arg_dateTextBoxId,dateTextBoxId);
+		args.putInt(arg_dateTextBoxId, dateTextBoxId);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -73,8 +78,6 @@ public class DatePickerFragment extends DialogFragment
 
 	@Override
 	public Dialog onCreateDialog(Bundle InstanceState) {
-		//Bundle args = new Bundle();
-		//args = this.getArguments();
 		InstanceState = getArguments();
 
 		year = InstanceState.getInt(arg_year);
@@ -86,13 +89,13 @@ public class DatePickerFragment extends DialogFragment
 	}
 
 	public void onDateSet(DatePicker view, int year, int month, int day) {
+		DateHandler dateService = new DateHandler();
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(year, month, day);
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String formattedDate = dateFormat.format(calendar.getTime());
+		String date = dateService.getDate(calendar);
 
-		mCallback.OnDateSelected(formattedDate, dateTextBoxId);
+		mCallback.OnDateSelected(date, dateTextBoxId);
 	}
 
 	@Override

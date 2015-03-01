@@ -16,14 +16,20 @@ import java.util.List;
 /**
  * Created by victorlu on 2015-02-21.
  */
-public class JSONResponseHandler implements ResponseHandler<List<String>> {
+public class  JSONResponseHandler implements ResponseHandler<List<String>> {
 
 	private static final String date = "Date";
 	private static final String open = "Open";
 	private static final String high = "High";
 	private static final String low = "Low";
 	private static final String close = "Close";
-	private static final String stockHeader = "data";
+	private static final String squery = "query";
+	private static final String sresults = "results";
+	private static final String squote = "quote";
+
+	public JSONResponseHandler () {
+
+	}
 
 	@Override
 	public List<String> handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
@@ -31,21 +37,24 @@ public class JSONResponseHandler implements ResponseHandler<List<String>> {
 		String JSONResponse = new BasicResponseHandler().handleResponse(response);
 
 		try {
-
 			JSONObject responseObject = (JSONObject) new JSONTokener(JSONResponse).nextValue();
+			JSONObject stockQuery = responseObject.getJSONObject(squery);
+			JSONObject stockResults = stockQuery.getJSONObject(sresults);
 
-			JSONArray stocks = responseObject.getJSONArray(stockHeader);
 
-			for (int i=0; i < stocks.length(); i++) {
+			if (stockResults == null)
+				return result;
 
-				JSONObject stock = (JSONObject) stocks.get(i);
+			JSONArray stockQuotes = stockResults.getJSONArray(squote);
 
-				if (stock != null) {
-					result.add(stock.get(date) + ": " +
-							open + "[" + stock.get(open) + "], " +
-							high + "[" + stock.get(high) + "], " +
-							low + "[" + stock.get(low) + "], " +
-							close + "[" + stock.get(close) + "] ");
+			for (int i=0; i < stockQuotes.length(); i++) {
+				JSONObject quote = stockQuotes.getJSONObject(i);
+				if (quote != null) {
+					result.add(quote.get(date) + ": " +
+							open + "[" + quote.get(open) + "], " +
+							high + "[" + quote.get(high) + "], " +
+							low + "[" + quote.get(low) + "], " +
+							close + "[" + quote.get(close) + "] ");
 				}
 			}
 		} catch (JSONException e) {

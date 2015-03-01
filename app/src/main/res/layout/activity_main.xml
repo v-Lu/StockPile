@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/stock_monitor_title"
         android:hint="@string/ticker_symbol_hint"
+        android:text="aapl"
         />
 
      <EditText
@@ -32,6 +33,7 @@
          android:layout_below="@id/ticker_symbol"
          android:hint="@string/start_date"
          android:focusable="false"
+         android:text="2015-2-13"
          />
 
     <EditText
@@ -42,6 +44,7 @@
         android:layout_toRightOf="@id/start_date"
         android:hint="@string/end_date"
         android:focusable="false"
+        android:text="2015-2-16"
         />
 
     <Button

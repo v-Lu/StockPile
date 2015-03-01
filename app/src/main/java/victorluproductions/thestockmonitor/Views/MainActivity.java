@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import victorluproductions.thestockmonitor.Helpers.DateHandler;
 import victorluproductions.thestockmonitor.Services.JSONTickerSearchActivity;
 import victorluproductions.thestockmonitor.Fragments.DatePickerFragment;
 import victorluproductions.thestockmonitor.R;
@@ -34,17 +35,17 @@ public class MainActivity extends FragmentActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		//new HttpGetTask().execute();
-
 		startDate = (EditText) findViewById(R.id.start_date);
 		endDate = (EditText) findViewById(R.id.end_date);
 
 		startDateId = startDate.getId();
 		endDateId = endDate.getId();
 
+		// setup date pickers
 		setDatePickerOnClickListener(startDate);
 		setDatePickerOnClickListener(endDate);
 
+		// setup search button
 		searchButton = (Button) findViewById((R.id.search));
 		setSearchButtonOnClickListener(searchButton);
 	}
@@ -60,17 +61,17 @@ public class MainActivity extends FragmentActivity
 				endDate = (EditText) findViewById(R.id.end_date);
 				ticker = (EditText) findViewById(R.id.ticker_symbol);
 
-				Intent jsonQueryIntent = new Intent(MainActivity.this, JSONTickerSearchActivity.class);
+				Intent intent = new Intent(MainActivity.this, JSONTickerSearchActivity.class);
 
-				jsonQueryIntent.putExtra(getString(R.string.start_date_string), startDate.getText().toString());
-				jsonQueryIntent.putExtra(getString(R.string.end_date_string), endDate.getText());
-				jsonQueryIntent.putExtra(getString(R.string.ticker_string), ticker.getText());
+				intent.putExtra(getString(R.string.start_date_string), startDate.getText());
+				intent.putExtra(getString(R.string.end_date_string), endDate.getText());
+				intent.putExtra(getString(R.string.ticker_string), ticker.getText());
 
-				startActivity(jsonQueryIntent);
+				startActivity(intent);
 
 
-			//Intent stockSearch = new Intent(getApplicationContext(), StockSearchResultActivity.class);
-			//startActivity(stockSearch);
+				//Intent stockSearch = new Intent(getApplicationContext(), StockSearchResultActivity.class);
+				//startActivity(stockSearch);
 			}
 		});
 	}
@@ -99,27 +100,16 @@ public class MainActivity extends FragmentActivity
 
 					datePicker = DatePickerFragment.newInstance(currYear, currMonth, currDay, et.getId());
 				} else {
-					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-					try {
-						Date date;
-						date = dateFormat.parse(textBoxValue);
+					DateHandler dateService = new DateHandler();
+					Calendar c = dateService.parseDate(textBoxValue);
 
-						Calendar c = Calendar.getInstance();
-						c.setTime(date);
+					currYear = c.get(Calendar.YEAR);
+					currMonth = c.get(Calendar.MONTH);
+					currDay = c.get(Calendar.DAY_OF_MONTH);
 
-						currYear = c.get(Calendar.YEAR);
-						currMonth = c.get(Calendar.MONTH);
-						currDay = c.get(Calendar.DAY_OF_MONTH);
-
-						datePicker = DatePickerFragment.newInstance(currYear, currMonth, currDay, et.getId());
-					}
-					catch (ParseException e) {
-						e.printStackTrace();
-					}
+					datePicker = DatePickerFragment.newInstance(currYear, currMonth, currDay, et.getId());
 				}
 				datePicker.show(getFragmentManager(), "datePicker");
-
-
 			}
 		});
 	}
@@ -173,7 +163,6 @@ public class MainActivity extends FragmentActivity
 
 		return super.onOptionsItemSelected(item);
 	}
-
 }
 
 

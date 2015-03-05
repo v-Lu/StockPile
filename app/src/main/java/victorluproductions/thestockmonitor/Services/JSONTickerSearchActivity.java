@@ -9,6 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.internal.bind.DateTypeAdapter;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
@@ -19,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import victorluproductions.thestockmonitor.Helpers.DateHandler;
@@ -74,7 +80,9 @@ public class JSONTickerSearchActivity extends ListActivity {
 			}
 
 			return mf.format(url, ticker, startDate, endDate);
+
 		}
+
 
 		@Override
 		protected List<String> doInBackground(Void... params) {
@@ -82,13 +90,14 @@ public class JSONTickerSearchActivity extends ListActivity {
 			JSONResponseHandler responseHandler = new JSONResponseHandler();
 
 			try {
-				client.execute(request, responseHandler);
+				return	client.execute(request, responseHandler);
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
-			} catch (IOException e ) {
+				return null;
+			} catch (IOException e) {
 				e.printStackTrace();
+				return null;
 			}
-			return null;
 		}
 
 		/*@Override
@@ -101,13 +110,14 @@ public class JSONTickerSearchActivity extends ListActivity {
 		protected void onPostExecute(List<String> results) {
 			super.onPostExecute(results);
 
+			if (client != null)
+				client.close();
+
 			ListView listView = (ListView) findViewById(R.id.json_list_view);
 
 			listView.setAdapter(new ArrayAdapter<String>(JSONTickerSearchActivity.this,
 					android.R.layout.simple_list_item_1, results));
 
-			if (client != null)
-				client.close();
 		}
 	}
 }

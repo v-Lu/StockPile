@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import victorluproductions.thestockmonitor.Helpers.DateHandler;
+import victorluproductions.thestockmonitor.Rest.RestClient;
 import victorluproductions.thestockmonitor.Services.JSONTickerSearchActivity;
 import victorluproductions.thestockmonitor.Fragments.DatePickerFragment;
 import victorluproductions.thestockmonitor.R;
@@ -25,7 +26,9 @@ public class MainActivity extends FragmentActivity
 	private int startDateId;
 	private int endDateId;
 
-	private EditText startDate;
+
+	@InjectView(R.id.start_date)
+	protected EditText startDate;
 	private EditText endDate;
 	private EditText ticker;
 	private Button searchButton;
@@ -68,6 +71,9 @@ public class MainActivity extends FragmentActivity
 				intent.putExtra(getString(R.string.ticker_string), ticker.getText());
 
 				startActivity(intent);
+
+				RestClient rc = new RestClient();
+				rc.getYahooApiService().getStockHistoricalData(ticker.getText(), startDate.getText(), endDate.getText());
 
 
 				//Intent stockSearch = new Intent(getApplicationContext(), StockSearchResultActivity.class);

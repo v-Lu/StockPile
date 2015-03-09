@@ -1,4 +1,4 @@
-package victorluproductions.thestockmonitor.Rest;
+package victorluproductions.stockpile.Rest;
 
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;

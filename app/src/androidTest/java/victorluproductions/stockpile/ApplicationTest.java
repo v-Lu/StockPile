@@ -1,4 +1,4 @@
-package victorluproductions.thestockmonitor;
+package victorluproductions.stockpile;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

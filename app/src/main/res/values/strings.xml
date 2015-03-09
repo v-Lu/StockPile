@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">TheStockMonitor</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">StockPile</string>
     <string name="action_settings">Settings</string>
     <string name="ticker_symbol_hint">Ticker Symbol</string>
     <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
-    <string name="stock_ticker_search_descr">Input a stock ticker symbol to find the Open, High, Low and Close values for a given date range.</string>
+    <string name="stock_ticker_search_descr">Input a ticker symbol to find the Open, High, Low and Close values for a given date range.</string>
     <string name="search_button">Search</string>
-    <string name="stock_search_result_activity">StockSearchResultActivity</string>
-    <string name="json_ticker_search_activity">JSONTickerSearchActivity</string>
-    <string name="start_date_string">startDate</string>
-    <string name="end_date_string">endDate</string>
-    <string name="ticker_string">ticker</string>
+    <string name="stock_search_result_activity">StockPile Results</string>
 </resources>

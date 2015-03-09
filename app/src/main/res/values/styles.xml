@@ -5,4 +5,19 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="stockSearchStyle" parent="@style/Theme.AppCompat.Light">
+        <item name="android:actionBarTabBarStyle">@style/stockSearchActionBar</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="stockSearchActionBar"
+            parent="@style/Widget.AppCompat.ActionBar">
+        <item name="android:textSize">30dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@style/stockSearchActionBarBGColor</item>
+    </style>
+
+    <style name="stockSearchActionBarBGColor">
+        <item name="android:colorBackground">#FFFFFF</item>
+    </style>
 </resources>

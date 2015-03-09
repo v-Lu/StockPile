@@ -1,29 +1,30 @@
-package victorluproductions.thestockmonitor.Rest;
+package victorluproductions.stockpile.Rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
-import victorluproductions.thestockmonitor.Rest.Services.YahooApiService;
+import victorluproductions.stockpile.Rest.Services.YahooApiService;
+
+import static retrofit.RestAdapter.*;
 
 /**
  * Created by victorlu on 15-03-02.
  */
 public class RestClient
 {
-	private static final String BASE_URL = "http://query.yahooapis.com/v1/public/yql?q=";
+	private static final String BASE_URL = "http://query.yahooapis.com/v1/public";
 	private YahooApiService apiService;
 
 	public RestClient()
 	{
 		Gson gson = new GsonBuilder()
 				.registerTypeAdapterFactory(new YahooAdapterFactory())
-				.setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
 				.create();
 
-		RestAdapter restAdapter = new RestAdapter.Builder()
-				.setLogLevel(RestAdapter.LogLevel.FULL)
+		RestAdapter restAdapter = new Builder()
+				.setLogLevel(LogLevel.FULL)
 				.setEndpoint(BASE_URL)
 				.setConverter(new GsonConverter(gson))
 				.build();

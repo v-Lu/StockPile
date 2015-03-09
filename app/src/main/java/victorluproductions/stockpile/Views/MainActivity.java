@@ -1,4 +1,4 @@
-package victorluproductions.thestockmonitor.Views;
+package victorluproductions.stockpile.Views;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -10,36 +10,37 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
-import victorluproductions.thestockmonitor.Helpers.DateHandler;
-import victorluproductions.thestockmonitor.Rest.RestClient;
-import victorluproductions.thestockmonitor.Services.JSONTickerSearchActivity;
-import victorluproductions.thestockmonitor.Fragments.DatePickerFragment;
-import victorluproductions.thestockmonitor.R;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import victorluproductions.stockpile.Helpers.DateHandler;
+import victorluproductions.stockpile.Fragments.DatePickerFragment;
+import victorluproductions.stockpile.R;
 
 public class MainActivity extends FragmentActivity
 						  implements DatePickerFragment.OnDateSetListener {
-	private int startDateId;
-	private int endDateId;
-
-
 	@InjectView(R.id.start_date)
 	protected EditText startDate;
-	private EditText endDate;
-	private EditText ticker;
-	private Button searchButton;
+
+	@InjectView(R.id.end_date)
+	protected EditText endDate;
+
+	@InjectView(R.id.ticker_symbol)
+	protected EditText ticker;
+
+	@InjectView(R.id.search)
+	protected Button searchButton;
+
+	private int startDateId;
+	private int endDateId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		startDate = (EditText) findViewById(R.id.start_date);
-		endDate = (EditText) findViewById(R.id.end_date);
+		ButterKnife.inject(this);
 
 		startDateId = startDate.getId();
 		endDateId = endDate.getId();
@@ -47,37 +48,29 @@ public class MainActivity extends FragmentActivity
 		// setup date pickers
 		setDatePickerOnClickListener(startDate);
 		setDatePickerOnClickListener(endDate);
-
-		// setup search button
-		searchButton = (Button) findViewById((R.id.search));
 		setSearchButtonOnClickListener(searchButton);
 	}
 
-	public void setSearchButtonOnClickListener(Button searchButton) {
-		searchButton.setOnClickListener(new View.OnClickListener() {
+	public void setSearchButtonOnClickListener(Button searchButton)	{
+		searchButton.setOnClickListener(new View.OnClickListener()
+		{
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				if (!validateFields())
 					return;
 
-				startDate = (EditText) findViewById(R.id.start_date);
-				endDate = (EditText) findViewById(R.id.end_date);
-				ticker = (EditText) findViewById(R.id.ticker_symbol);
+				Intent intent = new Intent(MainActivity.this, StockSearchResultActivity.class);
 
-				Intent intent = new Intent(MainActivity.this, JSONTickerSearchActivity.class);
-
-				intent.putExtra(getString(R.string.start_date_string), startDate.getText());
-				intent.putExtra(getString(R.string.end_date_string), endDate.getText());
-				intent.putExtra(getString(R.string.ticker_string), ticker.getText());
+				intent.putExtra("startDate", startDate.getText());
+				intent.putExtra("endDate", endDate.getText());
+				intent.putExtra("ticker", ticker.getText());
 
 				startActivity(intent);
 
-				RestClient rc = new RestClient();
-				rc.getYahooApiService().getStockHistoricalData(ticker.getText(), startDate.getText(), endDate.getText());
 
 
-				//Intent stockSearch = new Intent(getApplicationContext(), StockSearchResultActivity.class);
-				//startActivity(stockSearch);
+
 			}
 		});
 	}

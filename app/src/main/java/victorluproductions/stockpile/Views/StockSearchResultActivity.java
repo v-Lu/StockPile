@@ -1,8 +1,12 @@
 package victorluproductions.stockpile.Views;
 
+import android.app.ActionBar;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +41,11 @@ public class StockSearchResultActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_stock_search_result);
 		ButterKnife.inject(this);
+		//setup action bar
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		//Toolbar toolbar = (Toolbar) findViewById(R.id.searchResultToolbar);
+		//setSupportActionBar(toolbar);
 
 		Intent intent = getIntent();
 		Bundle intentBundle = intent.getExtras();
@@ -89,7 +98,7 @@ public class StockSearchResultActivity extends ActionBarActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_stock_search_result, menu);
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
@@ -105,5 +114,8 @@ public class StockSearchResultActivity extends ActionBarActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	public void onTabSelected(android.support.v7.app.ActionBar.Tab tab, FragmentTransaction ft) {
 	}
 }

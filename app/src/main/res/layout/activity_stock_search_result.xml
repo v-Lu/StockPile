@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -7,12 +8,19 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context="victorluproductions.stockpile.Views.StockSearchResultActivity">
+<!--
+    <android.support.v7.widget.Toolbar
+                android:id="@+id/searchResultToolbar"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+    /> -->
 
     <ListView
         android:id="@+id/stock_result_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:dividerHeight="0.1dp"
-        android:divider="#0000CC">
+        android:divider="#ff45cca6">
     </ListView>
 </RelativeLayout>

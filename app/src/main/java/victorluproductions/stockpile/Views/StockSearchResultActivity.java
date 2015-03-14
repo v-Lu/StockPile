@@ -2,16 +2,21 @@ package victorluproductions.stockpile.Views;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.astuetz.PagerSlidingTabStrip;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -22,6 +27,8 @@ import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import victorluproductions.stockpile.Fragments.HistoricalDataFragment;
+import victorluproductions.stockpile.Helpers.MyPagerAdapter;
 import victorluproductions.stockpile.Rest.Models.HistoricalDataQuery;
 import victorluproductions.stockpile.Rest.Models.Quote;
 import victorluproductions.stockpile.Rest.RestClient;
@@ -34,7 +41,15 @@ public class StockSearchResultActivity extends ActionBarActivity {
 	@InjectView(R.id.stock_result_list_view)
 	protected ListView stock_result_lv;
 
-	protected List<String> yahooResults = new ArrayList<String>();
+	@InjectView(R.id.tabs)
+	protected PagerSlidingTabStrip tabs;
+
+	@InjectView(R.id.pager)
+	protected ViewPager pager;
+
+	private MyPagerAdapter adapter;
+	private int currentColor = 0xFF666666;
+	protected ArrayList<String> yahooResults = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +57,8 @@ public class StockSearchResultActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_stock_search_result);
 		ButterKnife.inject(this);
 		//setup action bar
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-		//Toolbar toolbar = (Toolbar) findViewById(R.id.searchResultToolbar);
-		//setSupportActionBar(toolbar);
+		//tab setup
+		headerSetup();
 
 		Intent intent = getIntent();
 		Bundle intentBundle = intent.getExtras();
@@ -78,8 +91,16 @@ public class StockSearchResultActivity extends ActionBarActivity {
 						}
 						if (!yahooResults.isEmpty())
 						{
-							ArrayAdapter<String> adapter = new ArrayAdapter<String>(StockSearchResultActivity.this, android.R.layout.simple_list_item_1, yahooResults);
-							stock_result_lv.setAdapter(adapter);
+							//ArrayAdapter<String> adapter = new ArrayAdapter<String>(StockSearchResultActivity.this, android.R.layout.simple_list_item_1, yahooResults);
+							//stock_result_lv.setAdapter(adapter);
+
+							Bundle bundle = new Bundle();
+							bundle.putStringArrayList("results", yahooResults);
+
+							HistoricalDataFragment histFrag = new HistoricalDataFragment();
+							histFrag.setArguments(bundle);
+
+							histFrag.show(getSupportFragmentManager(), "HistoricalDataFragment");
 						}
 					}
 
@@ -93,6 +114,26 @@ public class StockSearchResultActivity extends ActionBarActivity {
 				});
 	}
 
+	public void headerSetup() {
+
+		//setup action bar
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		// Initialize the ViewPager and set an adapter
+		adapter = new MyPagerAdapter(getSupportFragmentManager());
+		pager.setAdapter(adapter);
+
+		// Bind the tabs to the ViewPager
+		tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+
+		final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+				.getDisplayMetrics());
+
+		pager.setPageMargin(pageMargin);
+
+		tabs.setViewPager(pager);
+
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -114,8 +155,5 @@ public class StockSearchResultActivity extends ActionBarActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
-	}
-
-	public void onTabSelected(android.support.v7.app.ActionBar.Tab tab, FragmentTransaction ft) {
 	}
 }

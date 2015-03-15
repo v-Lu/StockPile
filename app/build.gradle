@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
     defaultConfig {
         applicationId 'victorluproductions.stockpile'
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -25,7 +25,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:21.0.+'
+    compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'org.parceler:parceler:0.2.13'
     compile 'com.jakewharton:butterknife:6.1.0'

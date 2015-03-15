@@ -1,25 +1,40 @@
 package victorluproductions.stockpile.Views;
 
+import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import victorluproductions.stockpile.Helpers.DateHandler;
 import victorluproductions.stockpile.Fragments.DatePickerFragment;
 import victorluproductions.stockpile.R;
+import victorluproductions.stockpile.Rest.Models.HistoricalDataQuery;
+import victorluproductions.stockpile.Rest.Models.Quote;
+import victorluproductions.stockpile.Rest.RestClient;
 
-public class MainActivity extends FragmentActivity
+public class MainActivity extends ActionBarActivity
 						  implements DatePickerFragment.OnDateSetListener {
+	//retrofit tag
+	private final static String TAG = StockSearchResultActivity.class.getSimpleName();
+
 	@InjectView(R.id.start_date)
 	protected EditText startDate;
 
@@ -34,6 +49,7 @@ public class MainActivity extends FragmentActivity
 
 	private int startDateId;
 	private int endDateId;
+	protected ArrayList<String> yahooResults = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +76,54 @@ public class MainActivity extends FragmentActivity
 				if (!validateFields())
 					return;
 
-				Intent intent = new Intent(MainActivity.this, StockSearchResultActivity.class);
+				String yql = "select * from yahoo.finance.historicaldata where symbol =\"{0}\" and startDate = \"{1}\" and endDate = \"{2}\"";
 
-				intent.putExtra("startDate", startDate.getText());
-				intent.putExtra("endDate", endDate.getText());
-				intent.putExtra("ticker", ticker.getText());
+				MessageFormat mf = new MessageFormat(yql);
+				yql = mf.format(yql, ticker.getText(), startDate.getText(), endDate.getText());
 
-				startActivity(intent);
+				RestClient rc = new RestClient();
+				rc.getYahooApiService().getStockHistoricalData(yql,
+						new Callback<HistoricalDataQuery>()
+						{
+							@Override
+							public void success(HistoricalDataQuery results, Response response)
+							{
+								if (results.getQuery().getResults() != null)
+								{
+									for(Quote quote: results.getQuery().getResults().getQuotes()) {
+										yahooResults.add(quote.getDate() + ": " +
+												"Open[" + quote.getOpen() + "], " +
+												"High[" + quote.getHigh() + "], " +
+												"Low[" + quote.getLow() + "], " +
+												"Close[" + quote.getClose() + "] ");
+									}
+								}
+								if (!yahooResults.isEmpty())
+								{
+									Intent intent = new Intent(MainActivity.this, StockSearchResultActivity.class);
+									intent.putStringArrayListExtra("results", yahooResults);
 
+									startActivity(intent);
+								} else {
+									final AlertDialog.Builder noResultDialog  = new AlertDialog.Builder(MainActivity.this);
+									noResultDialog.setTitle("No Results");
+									noResultDialog.setMessage("Blah... Try again!");
+									noResultDialog.setPositiveButton("Ok",
+											new DialogInterface.OnClickListener() {
+												public void onClick(DialogInterface dialog, int which) {
+													dialog.dismiss();
+												}
+											});
+									noResultDialog.show();
+								}
+							}
 
-
-
+							@Override
+							public void failure(RetrofitError error)
+							{
+								Log.e(TAG, "Error : " + error.getMessage());
+							}
+						});
 			}
 		});
 	}

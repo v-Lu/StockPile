@@ -1,29 +1,21 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme">
-        <!-- Customize your theme here. -->
+    <style name="AppBaseTheme" parent="android:Theme.Light"></style>
+
+    <style name="AppTheme" parent="AppBaseTheme">
+        <item name="android:windowBackground">@color/background_window</item>
+        <item name="android:actionBarStyle">@style/actionBarStyle</item>
     </style>
 
-    <style name="AppCompatTheme" parent="@style/Theme.AppCompat.Light">
-        <item name="windowActionBar">false</item>
-        <item name="android:actionBarStyle">@style/stockSearchActionBar</item>
+    <style name="actionBarStyle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:icon">@drawable/stock_logo</item>
+        <item name="android:background">@drawable/ab_solid_example</item>
+        <!-- Support library compatibility -->
+        <item name="background">@drawable/ab_solid_example</item>
     </style>
-
 
     <style name="stockSearchStyle" parent="@style/Theme.AppCompat.Light">
         <item name="android:homeAsUpIndicator">@drawable/back_button</item>
-
     </style>
 
-    <!-- ActionBar styles -->
-    <style name="stockSearchActionBar">
-        <item name="android:textStyle">bold</item>
-        <item name="android:labelTextSize">30dp</item>
-        <item name="android:background">@style/stockSearchActionBarBGColor</item>
-    </style>
-
-    <style name="stockSearchActionBarBGColor">
-        <item name="android:colorBackground">@color/material_deep_teal_200</item>
-    </style>
 </resources>

@@ -1,45 +1,34 @@
 package victorluproductions.stockpile.Views;
 
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
-
-import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import victorluproductions.stockpile.Fragments.HistoricalDataFragment;
-import victorluproductions.stockpile.Helpers.MyPagerAdapter;
-import victorluproductions.stockpile.Rest.Models.HistoricalDataQuery;
-import victorluproductions.stockpile.Rest.Models.Quote;
-import victorluproductions.stockpile.Rest.RestClient;
 import victorluproductions.stockpile.R;
 
 
-public class StockSearchResultActivity extends ActionBarActivity {
+public class StockSearchResultActivity extends FragmentActivity {
+	//retrofit tag
 	private final static String TAG = StockSearchResultActivity.class.getSimpleName();
-
-	@InjectView(R.id.stock_result_list_view)
-	protected ListView stock_result_lv;
 
 	@InjectView(R.id.tabs)
 	protected PagerSlidingTabStrip tabs;
@@ -48,6 +37,8 @@ public class StockSearchResultActivity extends ActionBarActivity {
 	protected ViewPager pager;
 
 	private MyPagerAdapter adapter;
+	private ContactPagerAdapter contactAdapter;
+	private final Handler handler = new Handler();
 	private int currentColor = 0xFF666666;
 	protected ArrayList<String> yahooResults = new ArrayList<String>();
 
@@ -56,83 +47,18 @@ public class StockSearchResultActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_stock_search_result);
 		ButterKnife.inject(this);
-		//setup action bar
-		//tab setup
-		headerSetup();
 
 		Intent intent = getIntent();
-		Bundle intentBundle = intent.getExtras();
-
-		String startDate = intentBundle.get("startDate").toString();
-		String endDate = intentBundle.get("endDate").toString();
-		String ticker =	intentBundle.get("ticker").toString();
-		String yql = "select * from yahoo.finance.historicaldata where symbol =\"{0}\" and startDate = \"{1}\" and endDate = \"{2}\"";
-
-		MessageFormat mf = new MessageFormat(yql);
-		yql = mf.format(yql, ticker, startDate, endDate);
-
-		RestClient rc = new RestClient();
-		rc.getYahooApiService().getStockHistoricalData(yql,
-				new Callback<HistoricalDataQuery>()
-				{
-					@Override
-					public void success(HistoricalDataQuery results, Response response)
-					{
-						if (results.getQuery() != null)
-						{
-							for(Quote quote: results.getQuery().getResults().getQuotes()) {
-								yahooResults.add(quote.getDate() + ": " +
-										"Open[" + quote.getOpen() + "], " +
-										"High[" + quote.getHigh() + "], " +
-										"Low[" + quote.getLow() + "], " +
-										"Close[" + quote.getClose() + "] ");
-
-							}
-						}
-						if (!yahooResults.isEmpty())
-						{
-							//ArrayAdapter<String> adapter = new ArrayAdapter<String>(StockSearchResultActivity.this, android.R.layout.simple_list_item_1, yahooResults);
-							//stock_result_lv.setAdapter(adapter);
-
-							Bundle bundle = new Bundle();
-							bundle.putStringArrayList("results", yahooResults);
-
-							HistoricalDataFragment histFrag = new HistoricalDataFragment();
-							histFrag.setArguments(bundle);
-
-							histFrag.show(getSupportFragmentManager(), "HistoricalDataFragment");
-						}
-					}
-
-					@Override
-					public void failure(RetrofitError error)
-					{
-						Log.e(TAG, "Error : " + error.getMessage());
-
-
-					}
-				});
-	}
-
-	public void headerSetup() {
-
-		//setup action bar
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		yahooResults = intent.getExtras().getStringArrayList("results");
 
 		// Initialize the ViewPager and set an adapter
 		adapter = new MyPagerAdapter(getSupportFragmentManager());
 		pager.setAdapter(adapter);
 
-		// Bind the tabs to the ViewPager
-		tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-
 		final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
 				.getDisplayMetrics());
-
 		pager.setPageMargin(pageMargin);
-
 		tabs.setViewPager(pager);
-
 	}
 
 	@Override
@@ -155,5 +81,92 @@ public class StockSearchResultActivity extends ActionBarActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+
+	private Drawable.Callback drawableCallback = new Drawable.Callback() {
+		@Override
+		public void invalidateDrawable(Drawable who) {
+			getActionBar().setBackgroundDrawable(who);
+		}
+
+		@Override
+		public void scheduleDrawable(Drawable who, Runnable what, long when) {
+			handler.postAtTime(what, when);
+		}
+
+		@Override
+		public void unscheduleDrawable(Drawable who, Runnable what) {
+			handler.removeCallbacks(what);
+		}
+	};
+
+	public class MyPagerAdapter extends FragmentPagerAdapter {
+
+		private final String[] TITLES = { "Historical", "Dashboard", "News Feed"};
+
+		public MyPagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return TITLES[position];
+		}
+
+		@Override
+		public int getCount() {
+			return TITLES.length;
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			return HistoricalDataFragment.newInstance(position, yahooResults);
+		}
+
+	}
+
+	public class ContactPagerAdapter extends PagerAdapter implements PagerSlidingTabStrip.IconTabProvider {
+
+		private final int[] ICONS = { R.drawable.stock_logo };
+
+		public ContactPagerAdapter() {
+			super();
+		}
+
+		@Override
+		public int getCount() {
+			return ICONS.length;
+		}
+
+		@Override
+		public int getPageIconResId(int position) {
+			return ICONS[position];
+		}
+
+		@Override
+		public Object instantiateItem(ViewGroup container, int position) {
+			// looks a little bit messy here
+			//TextView v = new TextView(getActivity());
+			//v.setBackgroundResource(R.color.background_window);
+			//v.setText("PAGE " + (position + 1));
+			//final int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources()
+			//		.getDisplayMetrics());
+			//v.setPadding(padding, padding, padding, padding);
+			//v.setGravity(Gravity.CENTER);
+			//container.addView(v, 0);
+			return null;
+		}
+
+		@Override
+		public void destroyItem(ViewGroup container, int position, Object view) {
+			container.removeView((View) view);
+		}
+
+		@Override
+		public boolean isViewFromObject(View v, Object o) {
+			return v == ((View) o);
+		}
+
 	}
 }

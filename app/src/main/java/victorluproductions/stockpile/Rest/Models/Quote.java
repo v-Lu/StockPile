@@ -1,13 +1,8 @@
 package victorluproductions.stockpile.Rest.Models;
-import com.google.gson.annotations.SerializedName;
-import org.parceler.Parcel;
-
-import java.util.Date;
 
 /**
  * Created by victorlu on 15-03-02.
  */
-@Parcel
 public class Quote {
 
 	private String Symbol;

@@ -16,11 +16,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="victorluproductions.stockpile.Views.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -29,8 +27,7 @@
             android:name="victorluproductions.stockpile.Views.StockSearchResultActivity"
             android:label="@string/stock_search_result_activity"
             android:parentActivityName="victorluproductions.stockpile.Views.MainActivity"
-            android:theme="@style/AppTheme">
-
+            android:theme="@style/ActionBarTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="victorluproductions.stockpile.Views.MainActivity"/>

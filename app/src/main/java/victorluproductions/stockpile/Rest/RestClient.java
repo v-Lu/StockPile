@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
+import victorluproductions.stockpile.Rest.Models.Results;
 import victorluproductions.stockpile.Rest.Services.YahooApiService;
 
 import static retrofit.RestAdapter.*;
@@ -21,6 +22,7 @@ public class RestClient
 	{
 		Gson gson = new GsonBuilder()
 				.registerTypeAdapterFactory(new YahooAdapterFactory())
+				.registerTypeAdapter(Results.class, new CustomResultsDeserializer())
 				.create();
 
 		RestAdapter restAdapter = new Builder()

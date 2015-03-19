@@ -1,19 +1,22 @@
 package victorluproductions.stockpile.Rest.Models;
 
-import org.parceler.Parcel;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import victorluproductions.stockpile.Rest.CustomResultsDeserializer;
 
 /**
  * Created by victorlu on 15-03-05.
  */
-@Parcel
 public class Results {
 
-	private List<Quote> quote = new ArrayList<Quote>();
+	private List<Quote> quotes = new ArrayList<Quote>();
+
+	public Results(ArrayList<Quote> quotes) {
+		this.quotes = quotes;
+	}
 
 	public List<Quote> getQuotes() {
-		return quote;
+		return quotes;
 	}
 }

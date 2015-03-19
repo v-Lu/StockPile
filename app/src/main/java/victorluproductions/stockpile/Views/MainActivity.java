@@ -6,17 +6,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import java.text.MessageFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,7 +33,7 @@ import victorluproductions.stockpile.Rest.Models.HistoricalDataQuery;
 import victorluproductions.stockpile.Rest.Models.Quote;
 import victorluproductions.stockpile.Rest.RestClient;
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends FragmentActivity
 						  implements DatePickerFragment.OnDateSetListener {
 	//retrofit tag
 	private final static String TAG = StockSearchResultActivity.class.getSimpleName();
@@ -47,9 +50,23 @@ public class MainActivity extends ActionBarActivity
 	@InjectView(R.id.search)
 	protected Button searchButton;
 
-	private int startDateId;
-	private int endDateId;
+	@InjectView(R.id.open_checkbox)
+	protected CheckBox openCheckbox;
+
+	@InjectView(R.id.high_checkbox)
+	protected CheckBox highCheckbox;
+
+	@InjectView(R.id.low_checkbox)
+	protected CheckBox lowCheckbox;
+
+	@InjectView(R.id.close_checkbox)
+	protected CheckBox closeCheckbox;
+
+	protected int startDateId;
+	protected int endDateId;
 	protected ArrayList<String> yahooResults = new ArrayList<String>();
+	protected ArrayList<String> graphX = new ArrayList<String>();
+	protected ArrayList<String> graphY = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,18 +107,38 @@ public class MainActivity extends ActionBarActivity
 							{
 								if (results.getQuery().getResults() != null)
 								{
-									for(Quote quote: results.getQuery().getResults().getQuotes()) {
-										yahooResults.add(quote.getDate() + ": " +
-												"Open[" + quote.getOpen() + "], " +
-												"High[" + quote.getHigh() + "], " +
-												"Low[" + quote.getLow() + "], " +
-												"Close[" + quote.getClose() + "] ");
+									yahooResults.clear();
+									graphX.clear();
+									graphY.clear();
+									for(Quote quote : results.getQuery().getResults().getQuotes()) {
+
+										String output = "Date[" + quote.getDate() + "], ";
+
+										if (openCheckbox.isChecked())
+											output += "Open[" + quote.getOpen() + "], ";
+
+										if (highCheckbox.isChecked())
+											output += "High[" + quote.getHigh() + "], ";
+
+										if (lowCheckbox.isChecked())
+											output += "Low[" + quote.getLow() + "], ";
+
+										if (closeCheckbox.isChecked())
+											output += "Close[" + quote.getClose() + "], ";
+
+										output = output.replaceAll(",$", "");
+										yahooResults.add(output);
+
+										graphX.add(quote.getDate());
+										graphY.add(String.valueOf(quote.getOpen()));
 									}
 								}
 								if (!yahooResults.isEmpty())
 								{
 									Intent intent = new Intent(MainActivity.this, StockSearchResultActivity.class);
 									intent.putStringArrayListExtra("results", yahooResults);
+									intent.putStringArrayListExtra("graphX", graphX);
+									intent.putStringArrayListExtra("graphY", graphY);
 
 									startActivity(intent);
 								} else {
@@ -139,9 +176,6 @@ public class MainActivity extends ActionBarActivity
 				int currDay;
 				EditText et = (EditText) v;
 
-				//determine which date text box this is called from
-				findViewById(R.id.start_date);
-
 				String textBoxValue = et.getText().toString();
 
 				if (textBoxValue.isEmpty()) {
@@ -167,20 +201,25 @@ public class MainActivity extends ActionBarActivity
 	}
 
 	public void OnDateSelected(String date, int dateTextBoxId) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date dt = new Date();
+		try {
+			dt = dateFormat.parse(date);
+			date = dateFormat.format(dt);
+		}
+		catch (ParseException e) {
+			e.printStackTrace();
+		}
+
 		if (dateTextBoxId == startDateId) {
-			startDate = (EditText) findViewById(R.id.start_date);
 			startDate.setText(date);
 		}
 		else if (dateTextBoxId == endDateId) {
-			endDate = (EditText) findViewById(R.id.end_date);
 			endDate.setText(date);
 		}
 	}
 
 	public boolean validateFields() {
-		EditText startDate = (EditText) findViewById(R.id.start_date);
-		EditText endDate = (EditText) findViewById(R.id.end_date);
-		EditText ticker = (EditText) findViewById(R.id.ticker_symbol);
 
 		if (ticker.getText().toString().isEmpty())
 			return false;

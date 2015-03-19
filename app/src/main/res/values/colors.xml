@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="background_window">#FFE5E5E5</color>
+    <color name="my_primary_color">#00967D</color>
+    <color name="my_dark_primary_color">#00695C</color>
 </resources>

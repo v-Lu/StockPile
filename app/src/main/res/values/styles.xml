@@ -1,18 +1,21 @@
 <resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    </style>
 
-    <style name="AppBaseTheme" parent="android:Theme.Material.Light.DarkActionBar"></style>
-
-    <style name="AppTheme" parent="AppBaseTheme">
+    <style name="ActionBarTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/my_primary_color</item>
+        <item name="colorPrimaryDark">@color/my_dark_primary_color</item>
         <item name="android:windowBackground">@color/background_window</item>
-        <item name="android:actionBarStyle">@style/actionBarStyle</item>
+        <item name="actionBarStyle">@style/actionBarStyle</item>
+        <item name="android:textColor">@color/my_dark_primary_color</item>
     </style>
 
-    <style name="actionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:icon">@drawable/stock_logo</item>
-        <item name="android:background">@drawable/ab_solid_example</item>
-        <!-- Support library compatibility -->
-        <item name="background">@drawable/ab_solid_example</item>
+    <!-- ActionBar styles -->
+    <style name="actionBarStyle" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="homeAsUpIndicator">@drawable/stock_logo</item>
     </style>
+
+
 
 
 </resources>

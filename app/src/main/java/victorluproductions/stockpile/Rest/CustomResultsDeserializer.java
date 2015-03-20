@@ -21,14 +21,9 @@ import victorluproductions.stockpile.Rest.Models.Results;
 public class CustomResultsDeserializer implements JsonDeserializer<Results> {
 	@Override
 	public Results deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		Gson gson = new Gson();
-		String jsonString = gson.toJson(json);
-		JsonParser jParser = new JsonParser();
 		ArrayList<Quote> arrayQuotes = new ArrayList<Quote>();
 
-		JsonObject jo = new JsonObject();
-		jo = json.getAsJsonObject();
-		json = jo.get("quote");
+		json = json.getAsJsonObject().get("quote");
 
 		if (json.isJsonArray()) {
 			JsonArray jArray = new JsonArray();

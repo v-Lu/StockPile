@@ -10,6 +10,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,12 +18,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
+
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import victorluproductions.stockpile.Fragments.ChartFragment;
 import victorluproductions.stockpile.Fragments.HistoricalDataFragment;
+import victorluproductions.stockpile.Fragments.NewsFragment;
 import victorluproductions.stockpile.R;
+import victorluproductions.stockpile.Rest.Models.HistoricalDataQuery;
+import victorluproductions.stockpile.Rest.RestClient;
 
 
 public class StockSearchResultActivity extends ActionBarActivity {
@@ -38,10 +47,11 @@ public class StockSearchResultActivity extends ActionBarActivity {
 	private MyPagerAdapter adapter;
 	private ContactPagerAdapter contactAdapter;
 	private final Handler handler = new Handler();
-	private int currentColor = 0xFF666666;
+
 	protected ArrayList<String> yahooResults = new ArrayList<String>();
 	protected ArrayList<String> graphX = new ArrayList<String>();
 	protected ArrayList<String> graphY = new ArrayList<String>();
+	protected String ticker;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +75,30 @@ public class StockSearchResultActivity extends ActionBarActivity {
 		yahooResults = intent.getExtras().getStringArrayList("results");
 		graphX = intent.getExtras().getStringArrayList("graphX");
 		graphY = intent.getExtras().getStringArrayList("graphY");
+		ticker = intent.getExtras().getString("ticker");
+
+		getStockNews();
+	}
+
+	public void getStockNews() {
+
+		String yql = "select * from google.news where q =\"" + ticker + "\"";
+
+		RestClient rc = new RestClient();
+		rc.getYahooApiService().getStockNews(yql,
+				new Callback<NewsFragment>()
+				{
+					@Override
+					public void success(NewsFragment results, Response response) {
+
+					}
+
+					@Override
+					public void failure(RetrofitError error)
+					{
+						Log.e(TAG, "Error : " + error.getMessage());
+					}
+				});
 	}
 
 	@Override
@@ -129,8 +163,10 @@ public class StockSearchResultActivity extends ActionBarActivity {
 		public Fragment getItem(int position) {
 			if (position == 0)
 				return HistoricalDataFragment.newInstance(position, yahooResults);
-			else if (position == 1 || position == 2)
+			else if (position == 1)
 				return ChartFragment.newInstance(position, graphX, graphY);
+			else if (position == 2)
+				return NewsFragment.newInstance(yahooResults);
 
 			return null;
 		}

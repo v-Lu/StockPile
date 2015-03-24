@@ -6,30 +6,20 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
-import android.widget.Toast;
-
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.CombinedData;
-import com.github.mikephil.charting.data.DataSet;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.data.filter.Approximator;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.Highlight;
-
 import java.util.ArrayList;
 import java.util.Collections;
-
 import victorluproductions.stockpile.R;
 
 /**
@@ -46,6 +36,7 @@ public class ChartFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
 	private ArrayList<String> yAxis;
 
 	private LineChart lineChart;
+	private SeekBar xSeek;
 
 	public static ChartFragment newInstance(int position, ArrayList<String> graphX, ArrayList<String> graphY) {
 		ChartFragment f = new ChartFragment();
@@ -64,7 +55,6 @@ public class ChartFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
 		position = getArguments().getInt(ARG_POSITION);
 		xAxis = getArguments().getStringArrayList(ARG_RESULTSX);
 		yAxis = getArguments().getStringArrayList(ARG_RESULTSY);
-
 	}
 
 	@Override
@@ -79,13 +69,11 @@ public class ChartFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
 
 
 		if (xAxis.size() > 1) {
-
 			View V = inflater.inflate(R.layout.data_chart, container, false);
 
 			lineChart = (LineChart) V.findViewById(R.id.chart);
 
 			// need to reverse our arraylists (for charting purposes)
-
 			Collections.reverse(xAxis);
 			Collections.reverse(yAxis);
 
@@ -129,52 +117,6 @@ public class ChartFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
 
 	}
 
-
-/**
-	private void setData () {
-		Double highestValue = 0.0;
-		// find largest $ value in stocks
-		for(String x : xAxis) {
-			if (highestValue == 0)
-				Double.parseDouble(x);
-
-			if (Double.parseDouble(x) > highestValue)
-				highestValue = Double.parseDouble(x);
-		}
-
-		highestValue *= 1.2;
-		highestValue = Math.floor(highestValue);
-
-		ArrayList<String> xVals = new ArrayList<String>();
-		for (int i = 0; i < highestValue ; i++) {
-			xVals.add((i) + "");
-		}
-
-		//set x axis headers
-		LineData data = new LineData(yAxis);
-
-	/**	ArrayList<Entry> yVals = new ArrayList<Entry>();
-	//	for(int i=0; i<yAxis.size(); i++) {
-	//		yVals.add(new Entry( Double.parseDouble(yAxis.get(i)), i));
-	//	}
-
-		// create a dataset and give it a type
-	//	LineDataSet set1 = new LineDataSet(yVals, "DataSet 1");
-		// set1.setFillAlpha(110);
-		// set1.setFillColor(Color.RED);
-
-		// set the line to be drawn like this "- - - - - -"
-		set1.enableDashedLine(10f, 5f, 0f);
-		set1.setColor(Color.BLACK);
-		set1.setCircleColor(Color.BLACK);
-		set1.setLineWidth(1f);
-		set1.setCircleSize(3f);
-		set1.setDrawCircleHole(false);
-		set1.setValueTextSize(9f);
-		set1.setFillAlpha(65);
-		set1.setFillColor(Color.BLACK);
-	}
- **/
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		// redraw

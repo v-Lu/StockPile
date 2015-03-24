@@ -90,11 +90,10 @@ public class MainActivity extends FragmentActivity
 			@Override
 			public void onClick(View v)
 			{
-				if (!validateFields())
+				if (!validFields())
 					return;
 
 				String yql = "select * from yahoo.finance.historicaldata where symbol =\"{0}\" and startDate = \"{1}\" and endDate = \"{2}\"";
-
 				MessageFormat mf = new MessageFormat(yql);
 				yql = mf.format(yql, ticker.getText(), startDate.getText(), endDate.getText());
 
@@ -112,7 +111,7 @@ public class MainActivity extends FragmentActivity
 									graphY.clear();
 									for(Quote quote : results.getQuery().getResults().getQuotes()) {
 
-										String output = "Date[" + quote.getDate() + "], ";
+										String output = quote.getDate() + ": ";
 
 										if (openCheckbox.isChecked())
 											output += "Open[" + quote.getOpen() + "], ";
@@ -139,6 +138,7 @@ public class MainActivity extends FragmentActivity
 									intent.putStringArrayListExtra("results", yahooResults);
 									intent.putStringArrayListExtra("graphX", graphX);
 									intent.putStringArrayListExtra("graphY", graphY);
+									intent.putExtra("ticker", ticker.getText());
 
 									startActivity(intent);
 								} else {
@@ -154,7 +154,6 @@ public class MainActivity extends FragmentActivity
 									noResultDialog.show();
 								}
 							}
-
 							@Override
 							public void failure(RetrofitError error)
 							{
@@ -219,7 +218,7 @@ public class MainActivity extends FragmentActivity
 		}
 	}
 
-	public boolean validateFields() {
+	public boolean validFields() {
 
 		if (ticker.getText().toString().isEmpty())
 			return false;

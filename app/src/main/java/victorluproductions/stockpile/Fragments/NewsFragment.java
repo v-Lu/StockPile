@@ -1,11 +1,14 @@
 package victorluproductions.stockpile.Fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -19,13 +22,16 @@ import victorluproductions.stockpile.R;
  */
 public class NewsFragment extends Fragment{
 
-	private static String ARG_RESULTS = "results";
-	private ArrayList<String> results;
+	private static String ARG_NEWSTITLES = "titles";
+	private static String ARG_NEWSLINKS = "links";
+	private ArrayList<String> newsTitles  = new ArrayList<String>();
+	private ArrayList<String> newsLinks  = new ArrayList<String>();
 
-	public static NewsFragment newInstance (ArrayList<String> results){
+	public static NewsFragment newInstance (ArrayList<String> newsTitles, ArrayList<String> newsLinks){
 		NewsFragment f = new NewsFragment();
 		Bundle b = new Bundle();
-		b.putStringArrayList(ARG_RESULTS, results);
+		b.putStringArrayList(ARG_NEWSTITLES, newsTitles);
+		b.putStringArrayList(ARG_NEWSLINKS, newsLinks);
 		f.setArguments(b);
 		return f;
 	}
@@ -33,8 +39,8 @@ public class NewsFragment extends Fragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		results = getArguments().getStringArrayList(ARG_RESULTS);
+		newsTitles = getArguments().getStringArrayList(ARG_NEWSTITLES);
+		newsLinks = getArguments().getStringArrayList(ARG_NEWSLINKS);
 	}
 
 	@Override
@@ -49,14 +55,25 @@ public class NewsFragment extends Fragment{
 				.getDisplayMetrics());
 
 
-		if (results != null) {
+		if (newsTitles != null) {
 			View V = inflater.inflate(R.layout.news_data, container, false);
 
 			ListView lv = (ListView) V.findViewById(R.id.news_data_list_view);
 
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.my_text_view, results);
-			lv.setAdapter(adapter);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.my_text_view, newsTitles);
 
+			lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+					Uri uri = Uri.parse(newsLinks.get(position));
+					Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+					startActivity(intent);
+
+				}
+			});
+
+			lv.setAdapter(adapter);
 			params.setMargins(margin, margin, margin, margin);
 			lv.setLayoutParams(params);
 			lv.setLayoutParams(params);

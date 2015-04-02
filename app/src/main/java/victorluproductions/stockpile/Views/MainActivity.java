@@ -1,12 +1,9 @@
 package victorluproductions.stockpile.Views;
 
-import android.app.AlertDialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +11,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,15 +19,9 @@ import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import victorluproductions.stockpile.Helpers.DateHandler;
 import victorluproductions.stockpile.Fragments.DatePickerFragment;
 import victorluproductions.stockpile.R;
-import victorluproductions.stockpile.Rest.Models.HistoricalDataQuery;
-import victorluproductions.stockpile.Rest.Models.Quote;
-import victorluproductions.stockpile.Rest.RestClient;
 
 public class MainActivity extends FragmentActivity
 						  implements DatePickerFragment.OnDateSetListener {
@@ -67,6 +57,7 @@ public class MainActivity extends FragmentActivity
 	protected ArrayList<String> yahooResults = new ArrayList<String>();
 	protected ArrayList<String> graphX = new ArrayList<String>();
 	protected ArrayList<String> graphY = new ArrayList<String>();
+	protected ArrayList<String> newsTitles  = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,26 +81,76 @@ public class MainActivity extends FragmentActivity
 			@Override
 			public void onClick(View v)
 			{
+				// validate that ticker symbol and date fields are populated
 				if (!validFields())
 					return;
 
-				String yql = "select * from yahoo.finance.historicaldata where symbol =\"{0}\" and startDate = \"{1}\" and endDate = \"{2}\"";
+				Intent intent = new Intent(MainActivity.this, StockSearchResultActivity.class);
+
+				intent.putExtra("ticker", ticker.getText());
+				intent.putExtra("startDate", startDate.getText());
+				intent.putExtra("endDate", endDate.getText());
+				intent.putExtra("openCheckbox", openCheckbox.isChecked());
+				intent.putExtra("highCheckbox", highCheckbox.isChecked());
+				intent.putExtra("lowCheckbox", lowCheckbox.isChecked());
+				intent.putExtra("closeCheckbox", closeCheckbox.isChecked());
+				startActivity(intent);
+
+				/**
+				RestClient rc = new RestClient();
+
+				// find news based on ticker symbol (somewhat buggy for symbols like 'DATA')
+				String yql = "select * from google.news where q =\"" + ticker.getText() + "\"";
+
+				rc.getYahooApiService().getStockNews(yql,
+						new Callback<NewsQuery>()
+						{
+							@Override
+							public void success(NewsQuery results, Response response) {
+
+								newsTitles.clear();
+
+								// parse news results
+								if (results.getQuery().getResults() != null) {
+									List<Result> queryResults = results.getQuery().getResults().getResults();
+
+									for (Result r : queryResults) {
+										for (RelatedStory rs : r.getRelatedStories()) {
+											newsTitles.add(rs.getTitleNoFormatting().toString());
+										}
+										newsTitles.add(r.getTitleNoFormatting());
+									}
+								}
+							}
+
+							@Override
+							public void failure(RetrofitError error)
+							{
+								Log.e(TAG, "Error : " + error.getMessage());
+							}
+						});
+
+				// get ticker symbol's historical data for date range
+				yql = "select * from yahoo.finance.historicaldata where symbol =\"{0}\" and startDate = \"{1}\" and endDate = \"{2}\"";
 				MessageFormat mf = new MessageFormat(yql);
 				yql = mf.format(yql, ticker.getText(), startDate.getText(), endDate.getText());
 
-				RestClient rc = new RestClient();
 				rc.getYahooApiService().getStockHistoricalData(yql,
 						new Callback<HistoricalDataQuery>()
 						{
 							@Override
 							public void success(HistoricalDataQuery results, Response response)
 							{
+								yahooResults.clear();
+								graphX.clear();
+								graphY.clear();
+
+								// parse historical data results
 								if (results.getQuery().getResults() != null)
 								{
-									yahooResults.clear();
-									graphX.clear();
-									graphY.clear();
-									for(Quote quote : results.getQuery().getResults().getQuotes()) {
+									List<Quote> q = results.getQuery().getResults().getResults();
+
+									for(Quote quote : q) {
 
 										String output = quote.getDate() + ": ";
 
@@ -138,6 +179,7 @@ public class MainActivity extends FragmentActivity
 									intent.putStringArrayListExtra("results", yahooResults);
 									intent.putStringArrayListExtra("graphX", graphX);
 									intent.putStringArrayListExtra("graphY", graphY);
+									intent.putStringArrayListExtra("newsTitles", newsTitles);
 									intent.putExtra("ticker", ticker.getText());
 
 									startActivity(intent);
@@ -159,7 +201,7 @@ public class MainActivity extends FragmentActivity
 							{
 								Log.e(TAG, "Error : " + error.getMessage());
 							}
-						});
+						}); **/
 			}
 		});
 	}

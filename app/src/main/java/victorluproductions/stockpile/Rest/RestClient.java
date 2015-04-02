@@ -5,7 +5,9 @@ import com.google.gson.GsonBuilder;
 
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
+import victorluproductions.stockpile.Rest.Models.Result;
 import victorluproductions.stockpile.Rest.Models.Results;
+import victorluproductions.stockpile.Rest.Services.CustomRelatedStoriesDeserializer;
 import victorluproductions.stockpile.Rest.Services.YahooApiService;
 
 import static retrofit.RestAdapter.*;
@@ -21,9 +23,10 @@ public class RestClient
 	public RestClient()
 	{
 		Gson gson = new GsonBuilder()
-				.registerTypeAdapterFactory(new YahooAdapterFactory())
-				.registerTypeAdapter(Results.class, new CustomResultsDeserializer())
-				.create();
+			.registerTypeAdapterFactory(new YahooAdapterFactory())
+			.registerTypeAdapter(Results.class, new CustomResultsDeserializer())
+			.registerTypeAdapter(Result.class, new CustomRelatedStoriesDeserializer())
+			.create();
 
 		RestAdapter restAdapter = new Builder()
 				.setLogLevel(LogLevel.FULL)

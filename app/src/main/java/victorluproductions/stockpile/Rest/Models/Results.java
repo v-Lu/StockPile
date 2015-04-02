@@ -2,19 +2,20 @@ package victorluproductions.stockpile.Rest.Models;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
-import victorluproductions.stockpile.Rest.CustomResultsDeserializer;
 
 /**
  * Created by victorlu on 15-03-05.
  */
 public class Results<T> {
 	//private List<Quote> quotes = new ArrayList<Quote>();
+
+	public Results (List<T> result) {
+		this.setResults(result);
+	}
 
 	private List<T> results = new List<T>() {
 		@Override

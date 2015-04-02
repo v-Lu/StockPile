@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title_layout"
         android:hint="@string/ticker_symbol_hint"
-        android:text="aapl"
+        android:text="yhoo"
         />
 
     <LinearLayout
@@ -71,7 +71,7 @@
             android:hint="@string/end_date"
             android:focusable="false"
             android:layout_weight="0.5"
-            android:text="2015-02-16"
+            android:text="2015-02-19"
             />
     </LinearLayout>
 

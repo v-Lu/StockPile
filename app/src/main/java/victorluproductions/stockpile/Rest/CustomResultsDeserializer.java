@@ -1,5 +1,7 @@
 package victorluproductions.stockpile.Rest;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -54,9 +56,15 @@ public class CustomResultsDeserializer implements JsonDeserializer<Results> {
 			JsonArray jArray = new JsonArray();
 			jArray = json.getAsJsonArray();
 
+			Gson g = new GsonBuilder()
+					.registerTypeAdapterFactory(new YahooAdapterFactory())
+					.create();
+
+
 			for (JsonElement j : jArray) {
 				Result r = new Result();
-				r = context.deserialize(j, Result.class);
+
+				r = g.fromJson(j, Result.class);
 				arrayNews.add(r);
 			}
 			return new Results(arrayNews);

@@ -2,7 +2,6 @@ package victorluproductions.stockpile.Rest.Services;
 
 import retrofit.Callback;
 import retrofit.http.GET;
-import victorluproductions.stockpile.Fragments.NewsFragment;
 import victorluproductions.stockpile.Rest.Models.HistoricalDataQuery;
 import victorluproductions.stockpile.Rest.Models.NewsQuery;
 

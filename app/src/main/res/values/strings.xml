@@ -9,4 +9,5 @@
     <string name="stock_ticker_search_descr">Input a ticker symbol to find the Open, High, Low and Close values for a given date range.</string>
     <string name="search_button">Search</string>
     <string name="stock_search_result_activity">StockPiled Data</string>
+    <string name="no_data_text">Blah&#8230; Couldn\'t find any data for today. Let\'s try another date that again.</string>
 </resources>

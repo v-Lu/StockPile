@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/MPChartLib/MPChartLib.iml" filepath="$PROJECT_DIR$/MPChartLib/MPChartLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/StockPile.iml" filepath="$PROJECT_DIR$/StockPile.iml" />
       <module fileurl="file://$PROJECT_DIR$/StockPile.iml" filepath="$PROJECT_DIR$/StockPile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TheStockMonitor.iml" filepath="$PROJECT_DIR$/TheStockMonitor.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

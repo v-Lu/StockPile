@@ -45,6 +45,7 @@ public class HistoricalDataFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v;
 
 		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
 
@@ -55,20 +56,20 @@ public class HistoricalDataFragment extends Fragment {
 				.getDisplayMetrics());
 
 
-		if (results != null) {
-			View V = inflater.inflate(R.layout.historical_data, container, false);
+		if (results.size() > 0) {
+			v = inflater.inflate(R.layout.historical_data, container, false);
 
-			ListView lv = (ListView) V.findViewById(R.id.stock_result_list_view);
+			ListView lv = (ListView) v.findViewById(R.id.stock_result_list_view);
 
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.my_text_view, results);
 			lv.setAdapter(adapter);
 
 			params.setMargins(margin, margin, margin, margin);
 			lv.setLayoutParams(params);
-			lv.setLayoutParams(params);
-
-
 			fl.addView(lv);
+		} else {
+			v = inflater.inflate(R.layout.no_data, container, false);
+			fl.addView(v);
 		}
 
 		return fl;

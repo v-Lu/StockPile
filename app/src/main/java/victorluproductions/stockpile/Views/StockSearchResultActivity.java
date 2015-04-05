@@ -84,10 +84,6 @@ public class StockSearchResultActivity extends ActionBarActivity {
 
 		// get results from main page
 		Intent intent = getIntent();
-		//yahooResults = intent.getExtras().getStringArrayList("results");
-		//graphX = intent.getExtras().getStringArrayList("graphX");
-		//graphY = intent.getExtras().getStringArrayList("graphY");
-		//newsTitles = intent.getExtras().getStringArrayList("newsTitles");
 		ticker = intent.getExtras().get("ticker").toString();
 		startDate = intent.getExtras().get("startDate").toString();
 		endDate = intent.getExtras().get("endDate").toString();

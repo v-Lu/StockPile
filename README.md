@@ -16,7 +16,7 @@ Uses YQL web service to retrieve a stock's historical data and recent news. Quer
 
 ![alt tag](https://raw.github.com/v-Lu/StockPile/master/screenshots/ResultsPage2.png)
 
-- **Latest News**
+- **Links to the latest news**
 
 ![alt tag](https://raw.github.com/v-Lu/StockPile/master/screenshots/ResultsPage3.png)
 

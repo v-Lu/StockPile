@@ -125,6 +125,7 @@ public class StockSearchResultActivity extends ActionBarActivity {
 					public void failure(RetrofitError error)
 					{
 						Log.e(TAG, "Error : " + error.getMessage());
+						checkProcessCount();
 					}
 				});
 
@@ -177,9 +178,11 @@ public class StockSearchResultActivity extends ActionBarActivity {
 					public void failure(RetrofitError error)
 					{
 						Log.e(TAG, "Error : " + error.getMessage());
+						checkProcessCount();
 					}
 				});
 	}
+
 
 	public void checkProcessCount() {
 		if (callbackCount == 0) {

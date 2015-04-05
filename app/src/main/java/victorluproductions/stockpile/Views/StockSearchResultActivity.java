@@ -109,12 +109,12 @@ public class StockSearchResultActivity extends ActionBarActivity {
 
 							for (Result r : queryResults) {
 								for (RelatedStory rs : r.getRelatedStories()) {
-									newsTitles.add(rs.getTitleNoFormatting().toString());
-									newsLinks.add(rs.getSignedRedirectUrl().toString());
+									newsTitles.add(rs.getTitleNoFormatting());
+									newsLinks.add(rs.getSignedRedirectUrl());
 								}
 
-								newsTitles.add(r.getTitleNoFormatting().toString());
-								newsLinks.add(r.getSignedRedirectUrl().toString());
+								newsTitles.add(r.getTitleNoFormatting());
+								newsLinks.add(r.getSignedRedirectUrl());
 							}
 						}
 						// if both callbacks have been executed, disable spinner

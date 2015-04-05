@@ -27,21 +27,17 @@ import victorluproductions.stockpile.R;
  */
 public class ChartFragment extends Fragment implements SeekBar.OnSeekBarChangeListener,
 		OnChartGestureListener, OnChartValueSelectedListener {
-	private static final String ARG_POSITION = "position";
 	private static final String ARG_RESULTSX = "resultsX";
 	private static final String ARG_RESULTSY = "resultsY";
 
-	private int position;
 	private ArrayList<String> xAxis;
 	private ArrayList<String> yAxis;
 
 	private LineChart lineChart;
-	private SeekBar xSeek;
 
 	public static ChartFragment newInstance(int position, ArrayList<String> graphX, ArrayList<String> graphY) {
 		ChartFragment f = new ChartFragment();
 		Bundle b = new Bundle();
-		b.putInt(ARG_POSITION, position);
 		b.putStringArrayList(ARG_RESULTSX, graphX);
 		b.putStringArrayList(ARG_RESULTSY, graphY);
 		f.setArguments(b);
@@ -52,7 +48,6 @@ public class ChartFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		position = getArguments().getInt(ARG_POSITION);
 		xAxis = getArguments().getStringArrayList(ARG_RESULTSX);
 		yAxis = getArguments().getStringArrayList(ARG_RESULTSY);
 	}
@@ -111,10 +106,6 @@ public class ChartFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
 		}
 
 		return fl;
-	}
-
-	public void setData() {
-
 	}
 
 	@Override
